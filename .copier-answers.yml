@@ -1,0 +1,18 @@
+# Changes here will be overwritten by Copier
+_commit: 2.6.0
+_src_path: gh:DiamondLightSource/python-copier-template
+author_email: urszula.neuman@diamond.ac.uk
+author_name: Urszula Neuman
+component_lifecycle: experimental
+component_owner: group:default/beamline-controls
+component_type: library
+description: A script that substitutes macros in tamplate files.
+distribution_name: ppmac-macro-substitiution
+docker: false
+docs_type: README
+git_platform: github.com
+github_org: DiamondLightSource
+package_name: ppmac_macro_substitiution
+pypi: true
+repo_name: ppmac-macro-substitiution
+type_checker: pyright

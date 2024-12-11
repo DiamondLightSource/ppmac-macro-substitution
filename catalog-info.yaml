@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ppmac-macro-substitiution
+  title: ppmac-macro-substitiution
+  description: A script that substitutes macros in tamplate files.
+spec:
+  type: library
+  lifecycle: experimental
+  owner: group:default/beamline-controls
