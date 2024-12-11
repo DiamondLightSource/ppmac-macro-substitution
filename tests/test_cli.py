@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from ppmac_macro_substitiution import __version__
+from ppmac_macro_substitution import __version__
 
 
 def test_cli_version():
