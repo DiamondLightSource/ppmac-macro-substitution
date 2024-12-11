@@ -1,8 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: ppmac-macro-substitiution
-  title: ppmac-macro-substitiution
+  name: ppmac-macro-substitution
+  title: ppmac-macro-substitution
   description: A script that substitutes macros in tamplate files.
 spec:
   type: library

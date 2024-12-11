@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ppmac-macro-substitiution"
+name = "ppmac-macro-substitution"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
@@ -32,10 +32,10 @@ dev = [
 ]
 
 [project.scripts]
-ppmac-macro-substitiution = "ppmac_macro_substitiution.__main__:main"
+ppmac-macro-substitution = "ppmac_macro_substitution.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/DiamondLightSource/ppmac-macro-substitiution"
+GitHub = "https://github.com/DiamondLightSource/ppmac-macro-substitution"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "urszula.neuman@diamond.ac.uk"
@@ -43,7 +43,7 @@ name = "Urszula Neuman"
 
 
 [tool.setuptools_scm]
-version_file = "src/ppmac_macro_substitiution/_version.py"
+version_file = "src/ppmac_macro_substitution/_version.py"
 
 [tool.pyright]
 typeCheckingMode = "standard"
@@ -60,7 +60,7 @@ filterwarnings = "error"
 testpaths = "docs src tests"
 
 [tool.coverage.run]
-data_file = "/tmp/ppmac_macro_substitiution.coverage"
+data_file = "/tmp/ppmac_macro_substitution.coverage"
 
 [tool.coverage.paths]
 # Tests are run from installed location, map back to the src directory
@@ -84,7 +84,7 @@ allowlist_externals =
 commands =
     pre-commit: pre-commit run --all-files --show-diff-on-failure {posargs}
     type-checking: pyright src tests {posargs}
-    tests: pytest --cov=ppmac_macro_substitiution --cov-report term --cov-report xml:cov.xml {posargs}
+    tests: pytest --cov=ppmac_macro_substitution --cov-report term --cov-report xml:cov.xml {posargs}
 """
 
 [tool.ruff]

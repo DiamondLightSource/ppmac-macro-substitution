@@ -1,4 +1,4 @@
-"""Interface for ``python -m ppmac_macro_substitiution``."""
+"""Interface for ``python -m ppmac_macro_substitution``."""
 
 from argparse import ArgumentParser
 from collections.abc import Sequence

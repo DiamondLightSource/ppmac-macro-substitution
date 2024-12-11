@@ -7,12 +7,12 @@ component_lifecycle: experimental
 component_owner: group:default/beamline-controls
 component_type: library
 description: A script that substitutes macros in tamplate files.
-distribution_name: ppmac-macro-substitiution
+distribution_name: ppmac-macro-substitution
 docker: false
 docs_type: README
 git_platform: github.com
 github_org: DiamondLightSource
-package_name: ppmac_macro_substitiution
+package_name: ppmac_macro_substitution
 pypi: true
-repo_name: ppmac-macro-substitiution
+repo_name: ppmac-macro-substitution
 type_checker: pyright
