@@ -5,39 +5,48 @@ from pathlib import Path
 def generate(
     substitutes,
     template_files,
-    destination_folder=Path(
-        "BL99I-MO-STEP-01", "PMAC Script Language", "Kinematic Routines"
-    ),
-    template_source_folder=Path("configure", "coord_templates"),
+    template_source_folder=Path("..", "coord_templates"),
+    destination_folder="",
 ):
     """
-    Gets substitutes and templates files, uses them to
-    generate file in destination_folder.
-    Used primarily to generate kinematics.
+    Gets substitutes and template files (stored in template_source_folder),
+    uses them to generate files (primarily to generate kinematics).
+
+    The generated files are put in destination_folder which defaults to
+    template_source_folder.
+
+    Naming convention for kinematics:
+        cs_<coordinate_system_number>_<name_of_template_file>
+    and for other files:
+        tmp_<name_of_template_file>
 
     Args:
         substitutes (dict):
             A dictionary that holds names of all substitutes and their values.
         template_files (list):
             A list of template file names.
-        destination_folder (Path, optional):
-            The destination folder to store generated file.
-            Defaults to:
-            Path('BL99I-MO-STEP-01', 'PMAC Script Language','Kinematic Routines').
         template_source_folder (Path, optional):
-            The folder in which the template files are kept.
+            A folder in which the template files are kept.
             Defaults to:
-            Path('configure', 'coord_templates')."""
+            Path('..', 'coord_templates').
+        destination_folder (Path, optional):
+            A folder in which the generated files are put.
+            Defaults to:
+            template_source_folder
+    """
 
     for template_file in template_files:
         if "$(COORD)" in substitutes:
-            destination_file = destination_folder.joinpath(
+            destination_file = Path(destination_folder).joinpath(
                 Path("cs" + substitutes["$(COORD)"] + "_" + template_file)
             )
-        else:  # for non-kinematic use template file name
-            destination_file = destination_folder.joinpath(Path(template_file))
+
+        else:
+            destination_file = Path(destination_folder).joinpath(
+                Path("tmp_" + template_file)
+            )
         header = (
-            "// DO NOT MODIFY: File created from template_file: " + template_file + "\n"
+            "// DO NOT MODIFY: File created from template file: " + template_file + "\n"
         )
         if destination_file.exists():
             f = open(destination_file, "w")
