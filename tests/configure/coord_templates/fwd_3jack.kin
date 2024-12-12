@@ -1,0 +1,135 @@
+//###############################################
+// \file
+// Define motion of a generic 3 jack system. Jacks should be numbered in a
+// clockwise order looking from the top with J1 having the smallest Z value
+//
+// Original Author: Tom Cobb
+// Power PMAC version by James O'Hea
+//
+// Defined axes:
+// - X (addr 6) = Pitch in i15 EGUs
+// - Y (addr 7) = Roll in i15 EGUs
+// - Z (addr 8) = Height in same EGUs as jacks
+//
+// Macros (and example values):
+// - COORD = $(COORD)  CS number (only works for CS 1..9), e.g. 2
+// - J1 = $(J1)  Axisnum for jack 1, e.g. 2
+// - J1X = $(J1X)  global X co-ord of J1 base in mm, e.g. 0
+// - J1Z = $(J1Z)  global Z co-ord of J1 base in mm, e.g. -100
+// - J2 = $(J2)  Axisnum for jack 2, e.g. 3
+// - J2X = $(J2X)  global X co-ord of J2 base in mm, e.g. 50
+// - J2Z = $(J2Z)  global Z co-ord of J2 base in mm, e.g. 100
+// - J3 = $(J3)  Axisnum for jack 3, e.g. 4
+// - J3X = $(J3X)  global X co-ord of J3 base in mm, e.g. -50
+// - J3Z = $(J3Z)  global Z co-ord of J3 base in mm, e.g. 100
+// - MD = $(MD)  depth of surface in mm, e.g. 10
+// - MCX = $(MCX)  global X co-ord of measure point in mm, e.g. 0
+// - MCZ = $(MCZ)  global Z co-ord of measure in mm, e.g. 10
+//################################################
+
+// These are set by the pmac driver source
+#define J1MRES P(4800+$(J1))
+#define J1OFF  P(4900+$(J1))
+#define J2MRES P(4800+$(J2))
+#define J2OFF  P(4900+$(J2))
+#define J3MRES P(4800+$(J3))
+#define J3OFF  P(4900+$(J3))
+
+// The backlash demand in egu's is set by PROG_CS_motion_backlash.pmc (Q401..408)
+// NB Backlash defaults to zero (for use with PROG_CS_motion.pmc)
+#define BDSTJ1 Coord[$(COORD)].Q[400+$(J1)]
+#define BDSTJ2 Coord[$(COORD)].Q[400+$(J2)]
+#define BDSTJ3 Coord[$(COORD)].Q[400+$(J3)]
+BDSTJ1=0
+BDSTJ2=0
+BDSTJ3=0
+
+// Setup the inputs, all are in i15 EGUs or mm
+// These are the global co-ordinates of J1
+#define J1X Coord[$(COORD)].Q[20]
+J1X = $(J1X)
+#define J1Z Coord[$(COORD)].Q[21]
+J1Z = $(J1Z)
+// These are the global co-ordinates of J2
+#define J2X Coord[$(COORD)].Q[22]
+J2X = $(J2X)
+#define J2Z Coord[$(COORD)].Q[23]
+J2Z = $(J2Z)
+// These are the global co-ordinates of J3
+#define J3X Coord[$(COORD)].Q[24]
+J3X = $(J3X)
+#define J3Z Coord[$(COORD)].Q[25]
+J3Z = $(J3Z)
+// This is the surface depth
+#define MD  Coord[$(COORD)].Q[30]
+MD = $(MD)
+// This is the measure point for pitch, roll, Y in global co-ordinates
+#define MCX Coord[$(COORD)].Q[31]
+MCX = $(MCX)
+#define MCZ Coord[$(COORD)].Q[32]
+MCZ = $(MCZ)
+
+
+
+// Calculate Pitch, Roll and Height from jack positions
+#define J1Y (J1MRES*KinPosMotor$(J1)+J1OFF)
+#define J2Y (J2MRES*KinPosMotor$(J2)+J2OFF)
+#define J3Y (J3MRES*KinPosMotor$(J3)+J3OFF)
+#define PITCH   KinPosAxisX
+#define ROLL    KinPosAxisY
+#define HEIGHT  KinPosAxisZ
+#define CS_AXES KinEnaAxisX+KinEnaAxisY+KinEnaAxisZ
+
+// Local variables
+#define JP  Q128
+#define JR  Q129
+#define UX  Q130
+#define UY  Q131
+#define UZ  Q132
+#define VX  Q133
+#define VY  Q134
+#define VZ  Q135
+#define WX  Q136
+#define WY  Q137
+#define WZ  Q138
+OPEN FORWARD
+    local jp_
+    local jr_
+    local ux_
+    local uy_
+    local uz_
+    local vx_
+    local vy_
+    local vz_
+    local wx_
+    local wy_
+    local wz_
+
+    KinAxisUsed = CS_AXES
+    // We calculate vectors U = J3 - J1, V = J2 - J1
+    ux_ = J3X - J1X
+    uy_ = J3Y - J1Y
+    uz_ = J3Z - J1Z
+    vx_ = J2X - J1X
+    vy_ = J2Y - J1Y
+    vz_ = J2Z - J1Z
+    // The cross product of these gives W, the normal to the jack plane
+    wx_ = uy_*vz_-uz_*vy_
+    wy_ = uz_*vx_-ux_*vz_
+    wz_ = ux_*vy_-uy_*vx_
+    // We can calculate the pitch and roll of this normal from the Y+ vector
+    // WY != 0 as jacks are all in Y direction
+    jp_ = atan(wz_/wy_)
+    jr_ = -atan(wx_/wy_)
+    // Now we have pitch and roll
+    PITCH = jp_
+    ROLL = jr_
+    // Now we work out Y
+    // We already have W, normal to jack plane, so work out a point on the
+    // surface plane. Start at the top of jack1, then move up by MD
+    vx_ = J1X
+    vy_ = J1Y + MD/(cos(jr_)*cos(jp_))
+    vz_ = J1Z
+    // Now we can calculate the equation of the mirror plane, and so Y
+    HEIGHT = wx_*(vx_-MCX)/wy_ + vy_ + wz_*(vz_-MCZ)/wy_
+CLOSE

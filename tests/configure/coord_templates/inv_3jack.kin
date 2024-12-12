@@ -1,0 +1,73 @@
+//###############################################
+// \file
+// Define motion of a generic 3 jack system. Jacks should be numbered in a 
+// clockwise order looking from the top with J1 having the smallest Z value
+//
+// Original Author: Tom Cobb
+// Power PMAC version by James O'Hea
+//
+// Defined axes:
+// - X (addr 6) = Pitch in i15 EGUs
+// - Y (addr 7) = Roll in i15 EGUs
+// - Z (addr 8) = Height in same EGUs as jacks
+//
+// Macros (and example values):
+// - COORD = $(COORD)  CS number (only works for CS 1..9), e.g. 2
+// - J1 = $(J1)  Axisnum for jack 1, e.g. 2
+// - J1X = $(J1X)  global X co-ord of J1 base in mm, e.g. 0
+// - J1Z = $(J1Z)  global Z co-ord of J1 base in mm, e.g. -100
+// - J2 = $(J2)  Axisnum for jack 2, e.g. 3
+// - J2X = $(J2X)  global X co-ord of J2 base in mm, e.g. 50
+// - J2Z = $(J2Z)  global Z co-ord of J2 base in mm, e.g. 100 
+// - J3 = $(J3)  Axisnum for jack 3, e.g. 4
+// - J3X = $(J3X)  global X co-ord of J3 base in mm, e.g. -50 
+// - J3Z = $(J3Z)  global Z co-ord of J3 base in mm, e.g. 100 
+// - MD = $(MD)  depth of surface in mm, e.g. 10
+// - MCX = $(MCX)  global X co-ord of measure point in mm, e.g. 0
+// - MCZ = $(MCZ)  global Z co-ord of measure in mm, e.g. 10
+//################################################
+
+// Change to CS$(COORD)
+&$(COORD)
+
+// Set relevant axes to use kinematics
+#$(J1)->I
+#$(J2)->I
+#$(J3)->I
+
+// Calculate jack positions from Pitch, Roll and Height
+OPEN INVERSE
+    local jp_
+    local jr_
+    local ux_
+    local uy_
+    local uz_
+    local vx_
+    local vy_
+    local vz_
+    local wx_
+    local wy_
+    local wz_
+    local j1y_
+    local j2y_
+    local j3y_    
+    // get the jack pitch and roll
+    jp_ = PITCH
+    jr_ = ROLL
+    // define V, normal to jack plane
+    vx_ = -tan(jr_)
+    vy_ = 1.0
+    vz_ = tan(jp_)
+    // define W, the measurement point on the surface plane, moved down by the depth of the surface
+    wx_ = MCX
+    wy_ = HEIGHT - MD/(cos(jr_)*cos(jp_))
+    wz_ = MCZ
+    // we now have W, a point on the jack plane, and a V, the normal, so use equation to work out jack heights in EGUs
+    j1y_ = vx_*(wx_-j1x_)/vy_ + wy_ + vz_*(wz_-j1z_)/vy_
+    j2y_ = vx_*(wx_-j2x_)/vy_ + wy_ + vz_*(wz_-j2z_)/vy_
+    j3y_ = vx_*(wx_-j3x_)/vy_ + wy_ + vz_*(wz_-j3z_)/vy_
+    // and now in cts
+    KinPosMotor$(J1) = (j1y_ + BDSTJ1 - J1OFF) / J1MRES
+    KinPosMotor$(J2) = (j2y_ + BDSTJ2 - J2OFF) / J2MRES
+    KinPosMotor$(J3) = (j3y_ + BDSTJ3 - J3OFF) / J3MRES
+CLOSE
