@@ -7,6 +7,6 @@
 """
 
 from ._version import __version__
-from .ppmac_macro_substitiution import generate
+from .ppmac_macro_substitution import generate
 
 __all__ = ["__version__", "generate"]
