@@ -5,8 +5,8 @@ from pathlib import Path
 def generate(
     substitutes,
     template_files,
-    template_source_folder="../configure/coord_templates",
-    destination_folder="",
+    template_source_folder="configure/coord_templates",
+    destination_folder="configure/coord_substitutions",
 ):
     """
     Gets substitutes and template files (stored in template_source_folder),
@@ -28,11 +28,11 @@ def generate(
         template_source_folder (Str, optional):
             A folder in which the template files are kept.
             Defaults to:
-            '../configure/coord_templates'.
+            configure/coord_templates.
         destination_folder (Str, optional):
             A folder in which the generated files are put.
             Defaults to:
-            template_source_folder
+            configure/coord_substitutions
     """
     for template_file in template_files:
         if "$(COORD)" in substitutes:

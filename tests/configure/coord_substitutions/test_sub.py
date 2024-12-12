@@ -23,4 +23,5 @@ generate(
     substitutes,
     kinematic_template_files,
     template_source_folder="tests/configure/coord_templates",
+    destination_folder="tests/configure/coord_substitutions",
 )
