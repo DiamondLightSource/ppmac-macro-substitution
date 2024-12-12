@@ -2,7 +2,7 @@ import fileinput
 from pathlib import Path
 
 
-def build(
+def generate(
     substitutes,
     kinematic_template_files,
     kinematics_destination_folder=Path(
@@ -11,7 +11,7 @@ def build(
     template_source_folder=Path("configure", "coord_templates"),
 ):
     """
-    Gets substitutes and templates files uses them to
+    Gets substitutes and templates files, uses them to
     generate kinematics in kinematics_destination_folder.
 
     Args:
