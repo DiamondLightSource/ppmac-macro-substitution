@@ -19,4 +19,8 @@ substitutes["$(MCZ)"] = "2"
 
 kinematic_template_files = ["inv_3jack.kin", "fwd_3jack.kin"]
 
-generate(substitutes, kinematic_template_files)
+generate(
+    substitutes,
+    kinematic_template_files,
+    template_source_folder="tests/configure/coord_templates",
+)
