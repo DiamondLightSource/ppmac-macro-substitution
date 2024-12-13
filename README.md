@@ -7,16 +7,16 @@
 
 A script that substitutes macros in template files.
 
-    Gets substitutes and template files (stored in template_source_folder),
-    uses them to generate files (primarily kinematics).
+Gets substitutes and template files (stored in template_source_folder),
+uses them to generate files (primarily kinematics).
 
-    The generated files are put in destination_folder which defaults to
-    configure/coord_substitution.
+The generated files are put in destination_folder which defaults to
+configure/coord_substitution.
 
-    Naming convention for generated kinematics:
-        cs_<coordinate_system_number>_<name_of_template_file>
-    and for other files:
-        tmp_<name_of_template_file>
+Naming convention for generated kinematics:
+    cs_<coordinate_system_number>_<name_of_template_file>
+and for other files:
+    tmp_<name_of_template_file>
 
 Source          | <https://github.com/DiamondLightSource/ppmac-macro-substitution>
 :---:           | :---:
