@@ -14,9 +14,13 @@ The generated files are put in destination_folder which defaults to
 configure/coord_substitution.
 
 Naming convention for generated kinematics:
+```
     cs_<coordinate_system_number>_<name_of_template_file>
+```
 and for other files:
+```
     tmp_<name_of_template_file>
+```
 
 Source          | <https://github.com/DiamondLightSource/ppmac-macro-substitution>
 :---:           | :---:
