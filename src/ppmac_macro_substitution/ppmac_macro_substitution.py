@@ -13,9 +13,9 @@ def generate(
     uses them to generate files (primarily kinematics).
 
     The generated files are put in destination_folder which defaults to
-    to the folder in which the script is run.
+    configure/coord_substitution.
 
-    Naming convention for kinematics:
+    Naming convention for generated kinematics:
         cs_<coordinate_system_number>_<name_of_template_file>
     and for other files:
         tmp_<name_of_template_file>

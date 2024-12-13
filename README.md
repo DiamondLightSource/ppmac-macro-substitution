@@ -5,28 +5,55 @@
 
 # ppmac_macro_substitution
 
-A script that substitutes macros in tamplate files.
+A script that substitutes macros in template files.
 
-This is where you should write a short paragraph that describes what your module does,
-how it does it, and why people should use it.
+    Gets substitutes and template files (stored in template_source_folder),
+    uses them to generate files (primarily kinematics).
+
+    The generated files are put in destination_folder which defaults to
+    configure/coord_substitution.
+
+    Naming convention for generated kinematics:
+        cs_<coordinate_system_number>_<name_of_template_file>
+    and for other files:
+        tmp_<name_of_template_file>
 
 Source          | <https://github.com/DiamondLightSource/ppmac-macro-substitution>
 :---:           | :---:
 PyPI            | `pip install ppmac-macro-substitution`
 Releases        | <https://github.com/DiamondLightSource/ppmac-macro-substitution/releases>
 
-This is where you should put some images or code snippets that illustrate
-some relevant examples. If it is a library then you might put some
-introductory code here:
+To print the version of the script you can do:
 
 ```python
 from ppmac_macro_substitution import __version__
 
 print(f"Hello ppmac_macro_substitution {__version__}")
 ```
-
-Or if it is a commandline tool then you might put some example commands here:
+An example substitution file for 3 jack kinematic template:
 
 ```
-python -m ppmac_macro_substitution --version
+from ppmac_macro_substitution import generate
+
+substitutes = {}
+substitutes["$(COORD)"] = "4"
+substitutes["$(J1)"] = "1"
+substitutes["$(J1X)"] = "20"
+substitutes["$(J1Z)"] = "10"
+substitutes["$(J2)"] = "2"
+substitutes["$(J2X)"] = "12"
+substitutes["$(J2Z)"] = "13"
+substitutes["$(J3)"] = "3"
+substitutes["$(J3X)"] = "15"
+substitutes["$(J3Z)"] = "16"
+substitutes["$(MD)"] = "10"
+substitutes["$(MCX)"] = "100"
+substitutes["$(MCZ)"] = "2"
+
+kinematic_template_files = ["inv_3jack.kin", "fwd_3jack.kin"]
+
+generate(
+    substitutes,
+    kinematic_template_files,
+)
 ```
