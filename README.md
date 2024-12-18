@@ -7,8 +7,9 @@
 
 A script that substitutes macros in template files.
 
-Gets substitutes and template files (stored in template_source_folder),
+Gets substitutes and template files and
 uses them to generate files (primarily kinematics).
+Default location of template files: configure/coord_templates.
 
 The generated files are put in destination_folder which defaults to
 configure/coord_substitution.
@@ -61,3 +62,5 @@ generate(
     kinematic_template_files,
 )
 ```
+In order to generate the kinematics using default template folder and the default destination folder
+run the script in the folder above the configure folder.

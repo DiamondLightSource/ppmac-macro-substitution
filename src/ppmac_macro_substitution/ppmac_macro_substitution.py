@@ -9,8 +9,9 @@ def generate(
     destination_folder="configure/coord_substitutions",
 ):
     """
-    Gets substitutes and template files (stored in template_source_folder),
+    Gets substitutes and template files and
     uses them to generate files (primarily kinematics).
+    Default location of template files: configure/coord_templates.
 
     The generated files are put in destination_folder which defaults to
     configure/coord_substitution.
@@ -35,27 +36,24 @@ def generate(
             configure/coord_substitutions
     """
     for template_file in template_files:
+        prefix = ""
         if "$(COORD)" in substitutes:
-            destination_file = Path(destination_folder).joinpath(
-                Path("cs" + substitutes["$(COORD)"] + "_" + template_file)
-            )
-
+            prefix = "cs" + substitutes["$(COORD)"]
         else:
-            destination_file = Path(destination_folder).joinpath(
-                Path("tmp_" + template_file)
-            )
+            prefix = "tmp_"
+
+        destination_file = Path(destination_folder).joinpath(
+            Path(prefix + "_" + template_file)
+        )
+        destination_file.parent.mkdir(parents=True, exist_ok=True)
         header = (
             "// DO NOT MODIFY: File created from template file: " + template_file + "\n"
         )
-        if destination_file.exists():
-            f = open(destination_file, "w")
-            f.write(header)
-        else:
-            f = open(destination_file, "x")
-            f.write(header)
-        template_file_path = Path(template_source_folder).joinpath(template_file)
-        for line in fileinput.input(template_file_path):
-            for key in substitutes:
-                if key in line:
-                    line = line.replace(key, substitutes[key])
-            f.write(line)
+        with open(destination_file, "w") as kinematic_file:
+            kinematic_file.write(header)
+            template_file_path = Path(template_source_folder).joinpath(template_file)
+            for line in fileinput.input(template_file_path):
+                for key in substitutes:
+                    if key in line:
+                        line = line.replace(key, substitutes[key])
+                kinematic_file.write(line)
